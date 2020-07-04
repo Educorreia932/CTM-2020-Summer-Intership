@@ -1,0 +1,4 @@
+Node ID,x,y,z,Trafego oferecido (Mbit/s)
+FAP 1,25,25,5,50
+FAP 2,50,75,10,150
+FAP 3,75,25,15,300
