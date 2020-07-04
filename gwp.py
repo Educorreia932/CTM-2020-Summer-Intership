@@ -2,9 +2,9 @@ import csv
 from math import *
 from sympy.abc import x
 from sympy import Poly
-from sympy.solvers.inequalities import solve_rational_inequalities
+from sympy.solvers.inequalities import solve_poly_inequalities
 
-FAPS= []
+faps = []
 
 class FAP:
     def __init__(self, line):
@@ -24,14 +24,28 @@ with open("input.csv", "r") as csv_file:
         if line_count != 0:
             fap = FAP(line)
         
-            FAPS.append(fap)
+            faps.append(fap)
                        
         line_count += 1
-        
+              
 def solve_equation():
     K = -20 * log10((4 * pi) / (3 * 10 ^ 8)) - 20 * log10(5250 * 10 ^ 6) - (-85) 
     
-    return 
+    # equations = (
+    #     (Poly(x - 10), ">"), 
+    #     (Poly(-x + 1), ">")
+    # )
+    
+    equations = []
+    
+    for fap in faps:
+        equation = (Poly("x"), ">=")
+        
+        equations.append(equation)
+    
+    solution = solve_poly_inequalities(equations)
+    
+    return solution
                 
 # (𝑥𝑈𝐴𝑉 𝑟𝑒𝑙𝑎𝑦 −𝑥𝐹𝐴𝑃 𝑁) ^ 2
 #  + (𝑦𝑈𝐴𝑉 𝑟𝑒𝑙𝑎𝑦 −𝑦𝐹𝐴𝑃 𝑁) ^ 2
