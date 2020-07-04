@@ -31,26 +31,26 @@ def solve_equation(PT):
     
     m = GEKKO(remote = False)
     
+    x = m.Var()
+    y = m.Var()
+    z = m.Var()
+
     for fap in faps:
-        x = m.Var()
-        y = m.Var()
-        z = m.Var()
-        
         x_term = (x - fap.x) ** 2
         y_term = (y - fap.y) ** 2
-        z_term = (z - fap.z) ** 2 
+        z_term = (z - fap.z) ** 2
                
         radius_term = (10 ** ((K + PT - 11) / 20)) ** 2
         
         m.Equation(x_term + y_term + z_term <= radius_term)
-        
+ 
     try:
         m.solve(disp = False)
         solution = (x.value, y.value, z.value)
         
     except:
         solution = None
-    
+        
     return solution
                 
 def gwp():
