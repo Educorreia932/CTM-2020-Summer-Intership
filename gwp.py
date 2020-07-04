@@ -11,7 +11,19 @@ class FAP:
         self.y = line[2]
         self.z = line[3]
         self.traffic = line[4]
-    
+        self.snr = getSnr(self.traffic)
+
+def getSnr(traffic):
+    snr_file = open("snr.csv", "r")
+    snr_file.readline() # read first line
+    for line in snr_file.readlines():
+        fields = line.split(',') # Data Rate, Minimum SNR
+        if(float(traffic) <= float(fields[0])):
+            snr = int(fields[1])
+            break
+    snr_file.close()
+    return snr
+
 #  Open input file with the FAPs data
 with open("input.csv", "r") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
@@ -40,7 +52,7 @@ def solve_equation(PT):
         y_term = (y - fap.y) ** 2
         z_term = (z - fap.z) ** 2
                
-        radius_term = (10 ** ((K + PT - 11) / 20)) ** 2
+        radius_term = (10 ** ((K + PT - fap.snr) / 20)) ** 2
         
         m.Equation(x_term + y_term + z_term <= radius_term)
  
