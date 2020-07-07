@@ -1,6 +1,9 @@
-T = readtable('input.csv');
+T1 = readtable('input.csv');
+T2 = readtable('snr.csv');
 
-figure;hold on
+figure;
+hold on;
+CMap = parula(4);
 
 K = -20 * log10((4 * pi) / (3 * 10 ^ 8)) - 20 * log10(5250 * 10 ^ 6) + 85;
 PT = 0;
@@ -20,7 +23,7 @@ for i = 1:height(T)
     end
 
     % Scale to desire radius.
-    radius = (10 ^ ((K + PT - SNR) / 20)) ^ 2;
+    radius = 10 ^ ((K + PT - SNR) / 20);
     x = x * radius;
     y = y * radius;
     z = z * radius;
