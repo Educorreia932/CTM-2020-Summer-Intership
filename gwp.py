@@ -51,6 +51,8 @@ def solve_equation(PT):
         x_term = (x - fap.x) ** 2
         y_term = (y - fap.y) ** 2
         z_term = (z - fap.z) ** 2
+        
+        print(fap.snr)
                
         radius_term = (10 ** ((K + PT - fap.snr) / 20)) ** 2
         
