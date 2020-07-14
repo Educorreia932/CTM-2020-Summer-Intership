@@ -1,3 +1,10 @@
+import sys
+
+if((len(sys.argv) == 3 and sys.argv[1] == "--connect") == False):
+    sys.exit("Usage: python3 main.py --connect <ip:port>")
+
+connection_string = sys.argv[2]
+
 import csv
 from FAP import FAP
 from gwp import gwp
@@ -22,11 +29,14 @@ with open("input.csv", "r") as csv_file:
 # execute the GWP algorithm and print the power transmission needed for the GW UAV and its position
 print(gwp(faps))
 
-# initialize SITL
+# connect vehicle
 dronekit_api = dronekit_api()
-dronekit_api.initialize_SITL()
+dronekit_api.connect_vehicle(connection_string)
 
-dronekit_api.connect_vehicle()
-
-# close vehicle and stop SITL
-dronekit_api.stop_SITL()
+exit = False
+while(exit == False):
+    if(input("Write 'exit' to shutdown vehicle: ") == "exit"):
+        # close vehicle
+        dronekit_api.vehicle.close()
+        print("Complete")
+        exit = True
