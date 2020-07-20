@@ -27,16 +27,23 @@ with open("input.csv", "r") as csv_file:
         line_count += 1
 
 # execute the GWP algorithm and print the power transmission needed for the GW UAV and its position
-print(gwp(faps))
+PT, location = gwp(faps)
+print(PT, location)
 
 # connect vehicle
 dronekit_api = dronekit_api()
 dronekit_api.connect_vehicle(connection_string)
 
 exit = False
+menu_text = "Menu Commands:\n'gwp' to move the UAV to its optimal position\n'exit' to shutdown vehicle\nOption: "
 while(exit == False):
-    if(input("Write 'exit' to shutdown vehicle: ") == "exit"):
+    option = input(menu_text)
+    if(option == "gwp"):
+        dronekit_api.goto(location)
+    elif(option == "exit"):
         # close vehicle
         dronekit_api.vehicle.close()
         print("Complete")
         exit = True
+    else:
+        print("Invalid Option")

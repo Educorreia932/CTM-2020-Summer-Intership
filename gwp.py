@@ -21,7 +21,7 @@ def solve_equation(PT, faps):
  
     try:
         m.solve(disp = False)
-        solution = (x.value, y.value, z.value)
+        solution = (x.value[0], y.value[0], z.value[0])
         
     except:
         solution = None
