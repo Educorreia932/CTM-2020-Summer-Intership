@@ -11,8 +11,8 @@ from utils import *
 
 faps = []
 
-mcs_index_folder = "MCS Index/"
-faps_info_folder = "FAPs Info/"
+mcs_index_folder = "../MCS Index/"
+faps_info_folder = "../FAPs Info/"
 
 # get UAV config from user input
 bandwidth, spatial_streams, guard_interval = get_UAV_config()
