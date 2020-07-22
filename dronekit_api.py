@@ -11,6 +11,15 @@ class dronekit_api:
         # Connect to the Vehicle.
         print("Connecting to vehicle on: %s" % (connection_string,))
         self.vehicle = connect(connection_string, wait_ready=True)
+
+        while(self.vehicle.location.global_relative_frame.lat == 0 
+        and self.vehicle.location.global_relative_frame.lon == 0 
+        and self.vehicle.location.global_relative_frame.alt == 0):
+            print("Waiting for vehicle location to be set...")
+            time.sleep(1)
+        
+        self.global_relative_home_location = self.vehicle.location.global_relative_frame
+
         '''
         # Get some vehicle attributes (state)
         print "Get some vehicle attribute values:"
@@ -59,17 +68,19 @@ class dronekit_api:
                 break
             time.sleep(1)
 
+    def land(self):
+        print("Returning to Launch")
+        self.vehicle.mode = VehicleMode("RTL")
+
     def goto(self, location):
-    
-        self.arm_and_takeoff(10)
 
         print("Set default/target airspeed to 3")
         self.vehicle.airspeed = 3
 
         print("Going towards the optimal position ...")
         # X position is North, Y position is East
-        # get target_location relative to vehicle location
-        target_location = self.get_location_metres(self.vehicle.location.global_relative_frame, location[0], location[1])
+        # get target_location relative to home location
+        target_location = self.get_location_metres(self.global_relative_home_location, location[0], location[1])
         target_location.alt = location[2]
         self.vehicle.simple_goto(target_location)
 

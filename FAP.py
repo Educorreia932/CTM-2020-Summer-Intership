@@ -14,9 +14,8 @@ def getSnr(traffic, snr_file, guard_interval):
         traffic_index = 1
 
     snr_file = open(snr_file, "r")
-    snr_file.readline() # read first line
     for line in snr_file.readlines():
-        fields = line.split(',') # Data Rate, Minimum SNR
+        fields = line.split(',') # Traffic (800ns), Traffic (400ns), Minimum SNR
         if(float(traffic) <= float(fields[traffic_index])):
             snr = int(fields[2])
             break

@@ -17,7 +17,8 @@ def solve_equation(PT, faps):
                
         radius_term = (10 ** ((K + PT - fap.snr) / 20)) ** 2
         
-        m.Equation(x_term + y_term + z_term <= radius_term)
+        # z > 5 to ensure that the UAV is at a reasonable height
+        m.Equations([x_term + y_term + z_term <= radius_term, z > 5.0])
  
     try:
         m.solve(disp = False)
