@@ -1,0 +1,4 @@
+MCS Index
+File names format is <bandwidth>_<spatial streams>
+Information in .csv files is in the following format: 
+    Offered Traffic (Mbit/s) (Guard Interval: 800ns), Offered Traffic (Mbit/s) (Guard Interval: 400ns), Min. SNR

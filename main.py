@@ -12,15 +12,57 @@ from dronekit_api import *
 
 faps = []
 
+# returns SNR file relative path according to bandwidth and number of spatial streams
+def getSnrFile():
+    mcs_index_folder = "MCS Index/"
+
+    while(True):
+        try:
+            bandwidth = int(input("Bandwith (20, 40, 80 or 160 MHz): "))
+            if(bandwidth in [20, 40, 80, 160]):
+                break
+            else:
+                print("Invalid Option")
+        except ValueError:
+            print("Invalid Option")
+
+    while(True):
+        try:
+            spatial_streams = int(input("Spatial Streams (1, 2 or 3): "))
+            if(spatial_streams in [1,2,3]):
+                break
+            else:
+                print("Invalid Option")
+        except ValueError:
+            print("Invalid Option")
+
+    return mcs_index_folder + str(bandwidth) + "_" + str(spatial_streams) + ".csv"
+    
+
+
 #  Open input file with the FAPs data
 with open("input.csv", "r") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     
+    # get SNR file relative path according to bandwidth and number of spatial streams
+    snr_file = getSnrFile()
+
+    # ask the user for the Guard Interval to be used
+    while(True):
+        try:
+            guard_interval = int(input("Guard Interval (400 or 800ns): "))
+            if(guard_interval in [400, 800]):
+                break
+            else:
+                print("Invalid Option")
+        except ValueError:
+            print("Invalid Option")
+
     line_count = 0
     
     for line in csv_reader:
         if line_count != 0:
-            fap = FAP(line)
+            fap = FAP(line, snr_file, guard_interval)
         
             faps.append(fap)
                        
