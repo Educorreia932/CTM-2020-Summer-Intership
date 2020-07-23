@@ -20,17 +20,6 @@ class dronekit_api:
         
         self.global_relative_home_location = self.vehicle.location.global_relative_frame
 
-        '''
-        # Get some vehicle attributes (state)
-        print "Get some vehicle attribute values:"
-        print " GPS: %s" % vehicle.gps_0
-        print " Battery: %s" % vehicle.battery
-        print " Last Heartbeat: %s" % vehicle.last_heartbeat
-        print " Is Armable?: %s" % vehicle.is_armable
-        print " System status: %s" % vehicle.system_status.state
-        print " Mode: %s" % vehicle.mode.name    # settable
-        ''' 
-
     # arms vehicle and fly to target_altitude
     def arm_and_takeoff(self, target_altitude):
 
@@ -74,8 +63,8 @@ class dronekit_api:
 
     def goto(self, location):
 
-        print("Set default/target airspeed to 3")
-        self.vehicle.airspeed = 3
+        print("Set default/target airspeed to 5")
+        self.vehicle.airspeed = 5
 
         print("Going towards the optimal position ...")
         # X position is North, Y position is East
@@ -83,30 +72,7 @@ class dronekit_api:
         target_location = self.get_location_metres(self.global_relative_home_location, location[0], location[1])
         target_location.alt = location[2]
         self.vehicle.simple_goto(target_location)
-
-        # sleep so we can see the change in map
-        #time.sleep(30)
-
-        '''
-        print("Going towards second point for 30 seconds (groundspeed set to 10 m/s) ...")
-        point2 = LocationGlobalRelative(-35.363244, 149.168801, 20)
-        vehicle.simple_goto(point2, groundspeed=10)
-
-        # sleep so we can see the change in map
-        time.sleep(30)
-
-        print("Returning to Launch")
-        vehicle.mode = VehicleMode("RTL")
-
-        # Close vehicle object before exiting script
-        print("Close vehicle object")
-        vehicle.close()
-
-        # Shut down simulator if it was started.
-        if sitl:
-            sitl.stop()
-        '''
-
+        
     def get_location_metres(self, original_location, dNorth, dEast):
         """
         Returns a LocationGlobal object containing the latitude/longitude `dNorth` and `dEast` metres from the 

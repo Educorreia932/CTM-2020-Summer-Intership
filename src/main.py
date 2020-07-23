@@ -9,15 +9,13 @@ from dronekit_api import *
 
 from utils import *
 
-faps = []
+mcs_index_folder = "MCS Index/"
+faps_info_folder = "FAPs Info/"
 
-mcs_index_folder = "../MCS Index/"
-faps_info_folder = "../FAPs Info/"
+# get UAV config from user input: [bandwidth, spatial streams, guard interval]
+uav_config = get_UAV_config()
 
-# get UAV config from user input
-bandwidth, spatial_streams, guard_interval = get_UAV_config()
-
-snr_filename = mcs_index_folder + str(bandwidth) + "_" + str(spatial_streams) + ".csv"
+snr_filename = mcs_index_folder + str(uav_config["bandwidth"]) + "_" + str(uav_config["spatial_streams"]) + ".csv"
 
 
 dronekit_api = dronekit_api()
@@ -28,7 +26,7 @@ menu_text = "Menu Commands:\n'gwp' to start UAV simulation, it will simulate a r
 while(exit == False):
     option = input(menu_text)
     if(option == "gwp"):
-        UAV_simulation(dronekit_api, faps, faps_info_folder, snr_filename, guard_interval)
+        UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config)
     elif(option == "exit"):
         # close vehicle
         dronekit_api.vehicle.close()
