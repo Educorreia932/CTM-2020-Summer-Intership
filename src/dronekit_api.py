@@ -7,18 +7,15 @@ import time
 import math
 
 class dronekit_api:
+    def __init__(self, home_location):
+        lat = home_location[0]
+        lon = home_location[1]
+        self.global_home_location = LocationGlobal(lat, lon)
+
     def connect_vehicle(self, connection_string):
         # Connect to the Vehicle.
         print("Connecting to vehicle on: %s" % (connection_string,))
         self.vehicle = connect(connection_string, wait_ready=True)
-
-        while(self.vehicle.location.global_relative_frame.lat == 0 
-        and self.vehicle.location.global_relative_frame.lon == 0 
-        and self.vehicle.location.global_relative_frame.alt == 0):
-            print("Waiting for vehicle location to be set...")
-            time.sleep(1)
-        
-        self.global_relative_home_location = self.vehicle.location.global_relative_frame
 
     # arms vehicle and fly to target_altitude
     def arm_and_takeoff(self, target_altitude):
@@ -37,25 +34,50 @@ class dronekit_api:
             print(" Waiting for mode change (current = " + self.vehicle.mode.name + ", expected = " + mode + ")...")
             time.sleep(1)
 
+        if self.vehicle.armed == True:
+            was_disarmed = False
+        else:
+            was_disarmed = True
+
         self.vehicle.armed = True
         # Confirm vehicle armed before attempting to take off
         while not self.vehicle.armed:
             print(" Waiting for arming...")
             time.sleep(1)
 
-        print("Taking off!")
-        self.vehicle.simple_takeoff(target_altitude)  # Take off to target altitude
+        # if vehicle was disarmed it means it was on the ground so it has to takeoff
+        if(was_disarmed):
+            print("Taking off!")
+            self.vehicle.simple_takeoff(target_altitude)  # Take off to target altitude
 
-        # Wait until the vehicle reaches a safe height before processing the goto
-        #  (otherwise the command after Vehicle.simple_takeoff will execute
-        #   immediately).
-        while True:
-            print(" Altitude: ", self.vehicle.location.global_relative_frame.alt)
-            # Break and return from function just below target altitude.
-            if self.vehicle.location.global_relative_frame.alt >= target_altitude * 0.95:
-                print("Reached target altitude")
-                break
-            time.sleep(1)
+            # Wait until the vehicle reaches a safe height before processing the goto
+            #  (otherwise the command after Vehicle.simple_takeoff will execute
+            #   immediately).
+            while True:
+                print(" Altitude: ", self.vehicle.location.global_relative_frame.alt)
+                # Break and return from function just below target altitude.
+                if self.vehicle.location.global_relative_frame.alt >= target_altitude * 0.95:
+                    print("Reached target altitude")
+                    break
+                time.sleep(1)
+        else:
+            if self.vehicle.location.global_relative_frame.alt < target_altitude * 0.95:
+                print("Going up to " + str(target_altitude) + " meters of altitude!")
+                lat = self.vehicle.location.global_relative_frame.lat
+                lon = self.vehicle.location.global_relative_frame.lon
+                location = LocationGlobalRelative(lat, lon, target_altitude)
+                self.vehicle.simple_goto(location)  # Go up to target altitude
+
+                # Wait until the vehicle reaches a safe height before processing the goto
+                #  (otherwise the command after Vehicle.simple_takeoff will execute
+                #   immediately).
+                while True:
+                    print(" Altitude: ", self.vehicle.location.global_relative_frame.alt)
+                    # Break and return from function just below target altitude.
+                    if self.vehicle.location.global_relative_frame.alt >= target_altitude * 0.95:
+                        print("Reached target altitude")
+                        break
+                    time.sleep(1)
 
     def land(self):
         print("Returning to Launch")
@@ -63,13 +85,16 @@ class dronekit_api:
 
     def goto(self, location):
 
-        print("Set default/target airspeed to 5")
-        self.vehicle.airspeed = 5
+        airspeed = 10
+        print("Set default/target airspeed to " + str(airspeed))
+        self.vehicle.airspeed = airspeed
 
         print("Going towards the optimal position ...")
         # X position is North, Y position is East
         # get target_location relative to home location
-        target_location = self.get_location_metres(self.global_relative_home_location, location[0], location[1])
+        x = location[0]
+        y = location[1]
+        target_location = self.get_location_metres(self.global_home_location, x, y)
         target_location.alt = location[2]
         self.vehicle.simple_goto(target_location)
         
