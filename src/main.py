@@ -32,7 +32,7 @@ while (exit == False):
         UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config)
     
     elif option == "exit":
-        # close vehicle
+        # Close vehicle
         dronekit_api.vehicle.close()
         print("Complete")
         exit = True

@@ -1,9 +1,12 @@
 from gekko import GEKKO
 from math import log10, pi
 
-def solve_equation(PT, faps):
-    K = -20 * log10((4 * pi) / (3 * 10 ** 8)) - 20 * log10(5250 * 10 ** 6) - (-85) 
-    
+K = -20 * log10((4 * pi) / (3 * 10 ** 8)) - 20 * log10(5250 * 10 ** 6) - (-85) 
+
+def calculate_radius(PT, snr):
+    return (10 ** ((K + PT - snr) / 20)) ** 2
+
+def solve_equation(PT, faps):    
     m = GEKKO(remote = False)
     
     x = m.Var()
@@ -14,9 +17,8 @@ def solve_equation(PT, faps):
         x_term = (x - fap.x) ** 2
         y_term = (y - fap.y) ** 2
         z_term = (z - fap.z) ** 2
-               
-        radius_term = (10 ** ((K + PT - fap.snr) / 20)) ** 2
-        
+        radius_term = calculate_radius(PT, fap.snr)
+
         # z > 5 to ensure that the UAV is at a reasonable height
         m.Equations([x_term + y_term + z_term <= radius_term, z > 5.0])
  

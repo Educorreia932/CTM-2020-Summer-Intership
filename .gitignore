@@ -4,3 +4,9 @@ mav*
 
 ardupilot/
 logs/
+terrain/
+
+src/index.html
+eeprom.bin
+
+

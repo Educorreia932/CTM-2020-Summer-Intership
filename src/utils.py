@@ -18,7 +18,7 @@ def UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config):
             input("\nPress ENTER to get new FAPs information (filename " + faps_info_filename + "): ")
 
             # updateFAPs returns true if the UAV can handle the FAPs traffic, false otherwise
-            if(updateFAPs(faps, faps_info_filename, snr_filename, uav_config["guard_interval"], dronekit_api) == True):
+            if updateFAPs(faps, faps_info_filename, snr_filename, uav_config["guard_interval"]) == True:
                 # Execute the GWP algorithm and print the power transmission needed for the GW UAV and its position
                 PT, location = gwp(faps)
                 
@@ -29,6 +29,8 @@ def UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config):
                 print(" z: " + str(location[2]))
 
                 dronekit_api.goto(location)
+                
+                map_plot.plot(faps, dronekit_api, PT, location)
                 
             else:
                 print("\nUAV Configuration:")
@@ -68,7 +70,7 @@ def getSnr(traffic, guard_interval, snr_file):
     return snr
 
 # read new FAPs info from input_filename and updates faps list
-def updateFAPs(faps, input_filename, snr_filename, guard_interval, dronekit_api):   
+def updateFAPs(faps, input_filename, snr_filename, guard_interval):   
     faps.clear()
 
     #  Open input file with the FAPs data
@@ -95,8 +97,6 @@ def updateFAPs(faps, input_filename, snr_filename, guard_interval, dronekit_api)
                 faps.append(fap)
                         
             line_count += 1
-            
-    map_plot.plot(faps, dronekit_api)
 
     return True
 
@@ -121,10 +121,11 @@ def get_UAV_config():
                 break
             else:
                 print("Invalid Option")
+                
         except ValueError:
             print("Invalid Option")
 
-    # ask the user for the Guard Interval to be used
+    # Ask the user for the guard interval to be used
     while(True):
         try:
             guard_interval = int(input("Guard Interval (400 or 800ns): "))
