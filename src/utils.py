@@ -6,7 +6,6 @@ from gwp import gwp
 # simulates a real scenario where FAPs change their position and traffic demand,
 # and the UAV adjusts its position according to the FAPs
 def UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config):
-
     faps = []
 
     dronekit_api.arm_and_takeoff(10)
@@ -63,7 +62,6 @@ def getSnr(traffic, guard_interval, snr_file):
 
 # read new FAPs info from input_filename and updates faps list
 def updateFAPs(faps, input_filename, snr_filename, guard_interval):
-    
     faps.clear()
 
     #  Open input file with the FAPs data
@@ -94,7 +92,6 @@ def updateFAPs(faps, input_filename, snr_filename, guard_interval):
 
 # returns bandwidth, spatial streams and guard interval specified by the user
 def get_UAV_config():
-
     # ask the user for the bandwidth
     while(True):
         try:

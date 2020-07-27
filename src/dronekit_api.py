@@ -77,6 +77,7 @@ class dronekit_api:
                     if self.vehicle.location.global_relative_frame.alt >= target_altitude * 0.95:
                         print("Reached target altitude")
                         break
+                    
                     time.sleep(1)
 
     def land(self):
@@ -110,17 +111,21 @@ class dronekit_api:
         http://gis.stackexchange.com/questions/2951/algorithm-for-offsetting-a-latitude-longitude-by-some-amount-of-meters
         """
         earth_radius = 6378137.0 #Radius of "spherical" earth
+        
         #Coordinate offsets in radians
-        dLat = dNorth/earth_radius
-        dLon = dEast/(earth_radius*math.cos(math.pi*original_location.lat/180))
+        dLat = dNorth / earth_radius
+        dLon = dEast / (earth_radius*math.cos(math.pi * original_location.lat / 180))
 
         #New position in decimal degrees
-        newlat = original_location.lat + (dLat * 180/math.pi)
-        newlon = original_location.lon + (dLon * 180/math.pi)
+        newlat = original_location.lat + (dLat * 180 / math.pi)
+        newlon = original_location.lon + (dLon * 180 / math.pi)
+        
         if type(original_location) is LocationGlobal:
             targetlocation=LocationGlobal(newlat, newlon,original_location.alt)
+        
         elif type(original_location) is LocationGlobalRelative:
-            targetlocation=LocationGlobalRelative(newlat, newlon,original_location.alt)
+            targetlocation=LocationGlobalRelative(newlat, newlon, original_location.alt)
+        
         else:
             raise Exception("Invalid Location object passed")
             

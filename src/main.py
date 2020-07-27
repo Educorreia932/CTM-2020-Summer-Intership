@@ -18,20 +18,23 @@ uav_config = get_UAV_config()
 
 snr_filename = mcs_index_folder + str(uav_config["bandwidth"]) + "_" + str(uav_config["spatial_streams"]) + ".csv"
 
-
 dronekit_api = dronekit_api(home_location)
 dronekit_api.connect_vehicle(connection_string)
 
 exit = False
+
 menu_text = "\nMenu Commands:\n'gwp' to start UAV simulation, it will simulate a real scenario by reading FAPs information from files and changing its position according to this information\n'exit' to shutdown vehicle\nOption: "
+
 while(exit == False):
     option = input(menu_text)
     if(option == "gwp"):
         UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config)
+    
     elif(option == "exit"):
         # close vehicle
         dronekit_api.vehicle.close()
         print("Complete")
         exit = True
+        
     else:
         print("Invalid Option")
