@@ -85,7 +85,6 @@ class dronekit_api:
         self.vehicle.mode = VehicleMode("RTL")
 
     def goto(self, location):
-
         airspeed = 10
         print("Set default/target airspeed to " + str(airspeed))
         self.vehicle.airspeed = airspeed

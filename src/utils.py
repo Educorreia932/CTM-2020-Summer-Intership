@@ -2,8 +2,9 @@ import os
 import csv
 from FAP import FAP
 from gwp import gwp
+import map_plot
 
-# simulates a real scenario where FAPs change their position and traffic demand,
+# Simulates a real scenario where FAPs change their position and traffic demand,
 # and the UAV adjusts its position according to the FAPs
 def UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config):
     faps = []
@@ -12,16 +13,15 @@ def UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config):
 
     for filename in sorted(os.listdir(faps_info_folder)):
         if filename.endswith(".csv"): 
-
             faps_info_filename = faps_info_folder + filename
             
             input("\nPress ENTER to get new FAPs information (filename " + faps_info_filename + "): ")
 
             # updateFAPs returns true if the UAV can handle the FAPs traffic, false otherwise
-            if(updateFAPs(faps, faps_info_filename, snr_filename, uav_config["guard_interval"]) == True):
-
-                # execute the GWP algorithm and print the power transmission needed for the GW UAV and its position
+            if(updateFAPs(faps, faps_info_filename, snr_filename, uav_config["guard_interval"], dronekit_api) == True):
+                # Execute the GWP algorithm and print the power transmission needed for the GW UAV and its position
                 PT, location = gwp(faps)
+                
                 print("\nPT: " + str(PT))
                 print("Location:")
                 print(" x: " + str(location[0]))
@@ -29,6 +29,7 @@ def UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config):
                 print(" z: " + str(location[2]))
 
                 dronekit_api.goto(location)
+                
             else:
                 print("\nUAV Configuration:")
                 print(" Bandwidth: " + str(uav_config["bandwidth"]) + "MHz")
@@ -38,30 +39,36 @@ def UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config):
 
 
     input("\nPress ENTER to return to launch position: ")
+    
     dronekit_api.land()
 
-# from a FAP traffic get the corresponding SNR value from a file that contains MCS Index values
+# From a FAP traffic get the corresponding SNR value from a file that contains MCS Index values
 def getSnr(traffic, guard_interval, snr_file):
     snr = None
     
-    if(guard_interval == 800):
+    if guard_interval == 800:
         traffic_index = 0
-    elif(guard_interval == 400):
+        
+    elif guard_interval == 400:
         traffic_index = 1
 
     snr_file = open(snr_file, "r")
+    
     for line in snr_file.readlines():
         fields = line.split(',') # Traffic (800ns), Traffic (400ns), Minimum SNR
         if fields[traffic_index] == "N/A":
             continue
+        
         if(float(traffic) <= float(fields[traffic_index])):
             snr = int(fields[2])
             break
+    
     snr_file.close()
+    
     return snr
 
 # read new FAPs info from input_filename and updates faps list
-def updateFAPs(faps, input_filename, snr_filename, guard_interval):
+def updateFAPs(faps, input_filename, snr_filename, guard_interval, dronekit_api):   
     faps.clear()
 
     #  Open input file with the FAPs data
@@ -79,6 +86,7 @@ def updateFAPs(faps, input_filename, snr_filename, guard_interval):
                 traffic = line[4]
 
                 snr = getSnr(traffic, guard_interval, snr_filename)
+                
                 if snr == None:
                     return False
 
@@ -87,12 +95,14 @@ def updateFAPs(faps, input_filename, snr_filename, guard_interval):
                 faps.append(fap)
                         
             line_count += 1
+            
+    map_plot.plot(faps, dronekit_api)
 
     return True
 
-# returns bandwidth, spatial streams and guard interval specified by the user
+# Returns bandwidth, spatial streams and guard interval specified by the user
 def get_UAV_config():
-    # ask the user for the bandwidth
+    # Ask the user for the bandwidth
     while(True):
         try:
             bandwidth = int(input("Bandwidth (20, 40, 80 or 160 MHz): "))
@@ -103,7 +113,7 @@ def get_UAV_config():
         except ValueError:
             print("Invalid Option")
 
-    # ask the user for the number of spatial streams
+    # Ask the user for the number of spatial streams
     while(True):
         try:
             spatial_streams = int(input("Spatial Streams (1, 2 or 3): "))

@@ -1,15 +1,15 @@
 import sys
+from dronekit_api import *
+from utils import *
 
-if((len(sys.argv) == 5 and sys.argv[1] == "--connect" and sys.argv[3] == "--home") == False):
+# Verify command line arguments
+if ((len(sys.argv) == 5 and sys.argv[1] == "--connect" and sys.argv[3] == "--home") == False):
     sys.exit("Usage: python3 main.py --connect <ip:port> --home <lat>,<lon>,<alt>,<heading>")
 
 connection_string = sys.argv[2]
 home_location = [float(i) for i in sys.argv[4].split(",")]
 
-from dronekit_api import *
-
-from utils import *
-
+# Folders location
 mcs_index_folder = "MCS Index/"
 faps_info_folder = "FAPs Info/"
 
@@ -25,12 +25,13 @@ exit = False
 
 menu_text = "\nMenu Commands:\n'gwp' to start UAV simulation, it will simulate a real scenario by reading FAPs information from files and changing its position according to this information\n'exit' to shutdown vehicle\nOption: "
 
-while(exit == False):
+while (exit == False):
     option = input(menu_text)
-    if(option == "gwp"):
+    
+    if option == "gwp":
         UAV_simulation(dronekit_api, faps_info_folder, snr_filename, uav_config)
     
-    elif(option == "exit"):
+    elif option == "exit":
         # close vehicle
         dronekit_api.vehicle.close()
         print("Complete")
@@ -38,3 +39,4 @@ while(exit == False):
         
     else:
         print("Invalid Option")
+        

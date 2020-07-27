@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_753f78529a804c2a80814bb88df518e1 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+            <div class="folium-map" id="map_753f78529a804c2a80814bb88df518e1" ></div>
+        
+</body>
+<script>    
+    
+            var map_753f78529a804c2a80814bb88df518e1 = L.map(
+                "map_753f78529a804c2a80814bb88df518e1",
+                {
+                    center: [41.177942, -8.596081],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_13c374d9baeb45f6b19d8359a22d9835 = L.tileLayer(
+                "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",
+                {"attribution": "Map tiles by \u003ca href=\"http://stamen.com\"\u003eStamen Design\u003c/a\u003e, under \u003ca href=\"http://creativecommons.org/licenses/by/3.0\"\u003eCC BY 3.0\u003c/a\u003e. Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://creativecommons.org/licenses/by-sa/3.0\"\u003eCC BY SA\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_753f78529a804c2a80814bb88df518e1);
+        
+    
+            var marker_a22f4e48f46048e9b1bc5388b94d1476 = L.marker(
+                [41.178166578821035, -8.595782623172251],
+                {}
+            ).addTo(map_753f78529a804c2a80814bb88df518e1);
+        
+    
+            marker_a22f4e48f46048e9b1bc5388b94d1476.bindTooltip(
+                `<div>
+                     FAP 1
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_614c071be9c14c1b87943705476770fe = L.marker(
+                [41.17839115764206, -8.595185869516753],
+                {}
+            ).addTo(map_753f78529a804c2a80814bb88df518e1);
+        
+    
+            marker_614c071be9c14c1b87943705476770fe.bindTooltip(
+                `<div>
+                     FAP 2
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_e5c7c54863a5423ca716d23f78cca6a9 = L.marker(
+                [41.178615736463094, -8.595782623172251],
+                {}
+            ).addTo(map_753f78529a804c2a80814bb88df518e1);
+        
+    
+            marker_e5c7c54863a5423ca716d23f78cca6a9.bindTooltip(
+                `<div>
+                     FAP 3
+                 </div>`,
+                {"sticky": true}
+            );
+        
+</script>
