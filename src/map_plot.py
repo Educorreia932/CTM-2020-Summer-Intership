@@ -54,4 +54,4 @@ def plot(faps, dronekit_api, PT, UAV_location):
     
     m.save('index.html')
     
-    webbrowser.open('index.html', new = 2)
+    # webbrowser.get('google-chrome').open('index.html', new = 2)
