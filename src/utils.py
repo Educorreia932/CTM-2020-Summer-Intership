@@ -102,6 +102,9 @@ def updateFAPs(faps, input_filename, snr_filename, guard_interval):
 
 # Returns bandwidth, spatial streams and guard interval specified by the user
 def get_UAV_config():
+    print("=================")
+    print("UAV configuration")
+    print("=================")
     # Ask the user for the bandwidth
     while(True):
         try:
