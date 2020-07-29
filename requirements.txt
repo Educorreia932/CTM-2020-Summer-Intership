@@ -1,2 +1,4 @@
 gekko
+matplotlib
+dronekit
 folium
