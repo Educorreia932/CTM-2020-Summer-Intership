@@ -22,3 +22,23 @@ For the simulation we used the [SITL Simulator](https://ardupilot.org/dev/docs/s
 It wasn't possible, however, to represent the FAPs in the simulation easily, so we used [Folium](https://github.com/dronekit/dronekit-python) Python library that represents the whole scene in a interactive map.
 
 ![Map](map.png)
+
+### Instructions
+
+To install **ArduPilot**, open a terminal in the project folder and run:
+
+```sh
+git clone https://github.com/ArduPilot/ardupilot
+cd ardupilot
+git submodule update --init --recursive
+```
+ 
+To install pip dependencies open a terminal in the project folder and run:
+```sh
+pip install -r requirements.txt
+```
+ 
+To run the program open a terminal in the project folder and run:
+```sh
+./run_sitl.sh
+```
